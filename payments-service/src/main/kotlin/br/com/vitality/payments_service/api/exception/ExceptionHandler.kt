@@ -9,11 +9,6 @@ import java.lang.Exception
 
 @RestControllerAdvice
 class ExceptionHandler {
-    @ExceptionHandler(NotFoundException::class)
-    fun handleNotFoundException(e: NotFoundException): ResponseEntity<ErrorDTO> {
-        val error = ErrorDTO(error = HttpStatus.NOT_FOUND.name, message = e.message)
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error)
-    }
 
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception): ResponseEntity<ErrorDTO> {

@@ -11,7 +11,6 @@ class PagamentoRequestListener(private val pagamentoService: PagamentoService) {
 
     @RabbitListener(queues = ["payment.request.queue"])
     fun persistirPagamento(@Payload dto: PagamentoInputDTO) {
-        println(dto)
         pagamentoService.persistirPagamento(dto)
     }
 }
