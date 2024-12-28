@@ -19,9 +19,13 @@ class PagamentoService(
     private val rabbitTemplate: RabbitTemplate) {
 
     fun persistirPagamento(dto: PagamentoInputDTO) {
-        println(dto)
 
-        val idPagamento = UUID.randomUUID().toString()
+        var idPagamento: String
+        do {
+            idPagamento = UUID.randomUUID().toString()
+        } while (pagamentoRepository.existsById(idPagamento))
+
+
         val pagamento = Pagamento(
             id = idPagamento,
             idUsuario = dto.idUsuario,
@@ -35,6 +39,7 @@ class PagamentoService(
         pagamentoRepository.save(pagamento)
 
         rabbitTemplate.convertAndSend("payment.made.queue", PagamentoOutputDTO(
-            idUsuario = pagamento.idUsuario, assinatura = pagamento.assinatura))
+            idUsuario = pagamento.idUsuario,
+            assinatura = pagamento.assinatura))
     }
 }
