@@ -1,6 +1,7 @@
 package br.com.vitality.payments_service.domain.service
 
 import br.com.vitality.payments_service.api.dto.input.PagamentoInputDTO
+import br.com.vitality.payments_service.api.dto.output.PagamentoOutputDTO
 import br.com.vitality.payments_service.domain.model.Pagamento
 import br.com.vitality.payments_service.domain.repository.PagamentoRepository
 import br.com.vitality.payments_service.domain.service.strategy.ValidarPagamentoFactory
@@ -33,5 +34,7 @@ class PagamentoService(
 
         pagamentoRepository.save(pagamento)
 
+        rabbitTemplate.convertAndSend("payment.made.queue", PagamentoOutputDTO(
+            idUsuario = pagamento.idUsuario, assinatura = pagamento.assinatura))
     }
 }

@@ -3,6 +3,7 @@ package br.com.vitality.users_service.domain.service;
 import br.com.vitality.users_service.api.dto.input.AtualizarUsuarioDTO;
 import br.com.vitality.users_service.api.dto.input.CadastroUsuarioDTO;
 import br.com.vitality.users_service.api.dto.input.FazerPagamentoDTO;
+import br.com.vitality.users_service.api.dto.input.PagamentoOutputDTO;
 import br.com.vitality.users_service.api.dto.output.UsuarioOutputDTO;
 import br.com.vitality.users_service.api.exception.NotFoundException;
 import br.com.vitality.users_service.domain.model.Usuario;
@@ -74,5 +75,12 @@ public class UsuarioService {
         rabbitTemplate.convertAndSend("payment.request.queue", dto);
 
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Transactional
+    public void mudarAssinatura(PagamentoOutputDTO dto) {
+        Usuario usuario = usuarioRepository.findById(dto.getIdUsuario()).orElseThrow(() -> new NotFoundException("Usuário não encontrado!"));
+
+        usuario.setAssinatura(dto.getAssinatura());
     }
 }
