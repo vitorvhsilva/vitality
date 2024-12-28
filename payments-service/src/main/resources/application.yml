@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: "payments-service"
+  data:
+    mongodb:
+      authentication-database: admin
+      auto-index-creation: true
+      host: localhost
+      port: 27017
+      database: pagamentos_db
+      username: admin
+      password: admin
+      uri: mongodb://localhost:27017/pagamentos_db

@@ -4,7 +4,6 @@ import br.com.vitality.users_service.api.dto.input.AtualizarUsuarioDTO;
 import br.com.vitality.users_service.api.dto.input.CadastroUsuarioDTO;
 import br.com.vitality.users_service.api.dto.output.UsuarioOutputDTO;
 import br.com.vitality.users_service.domain.service.UsuarioService;
-import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
