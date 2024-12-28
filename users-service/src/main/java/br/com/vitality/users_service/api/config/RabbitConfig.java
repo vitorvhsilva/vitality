@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitConfig {
     @Bean
     public Queue criarFila() {
-        return new Queue("signature.queue", false);
+        return new Queue("payment.request.queue", false);
     }
 
     @Bean

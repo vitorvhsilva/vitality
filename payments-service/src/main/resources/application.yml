@@ -11,3 +11,6 @@ spring:
       username: admin
       password: admin
       uri: mongodb://localhost:27017/pagamentos_db
+
+server:
+  port: 8081

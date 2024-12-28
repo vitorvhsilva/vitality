@@ -2,6 +2,7 @@ package br.com.vitality.users_service.api.controller;
 
 import br.com.vitality.users_service.api.dto.input.AtualizarUsuarioDTO;
 import br.com.vitality.users_service.api.dto.input.CadastroUsuarioDTO;
+import br.com.vitality.users_service.api.dto.input.FazerPagamentoDTO;
 import br.com.vitality.users_service.api.dto.output.UsuarioOutputDTO;
 import br.com.vitality.users_service.domain.service.UsuarioService;
 import lombok.AllArgsConstructor;
@@ -40,5 +41,10 @@ public class UsuarioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return usuarioService.deletar(id);
+    }
+
+    @PostMapping("/pagamentos")
+    public ResponseEntity<Void> fazerPagamento(@RequestBody FazerPagamentoDTO dto) {
+        return usuarioService.fazerPagamento(dto);
     }
 }

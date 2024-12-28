@@ -2,6 +2,7 @@ package br.com.vitality.users_service.domain.service;
 
 import br.com.vitality.users_service.api.dto.input.AtualizarUsuarioDTO;
 import br.com.vitality.users_service.api.dto.input.CadastroUsuarioDTO;
+import br.com.vitality.users_service.api.dto.input.FazerPagamentoDTO;
 import br.com.vitality.users_service.api.dto.output.UsuarioOutputDTO;
 import br.com.vitality.users_service.api.exception.NotFoundException;
 import br.com.vitality.users_service.domain.model.Usuario;
@@ -10,6 +11,7 @@ import br.com.vitality.users_service.domain.utils.enums.Assinatura;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class UsuarioService {
     private UsuarioRepository usuarioRepository;
     private ModelMapper modelMapper;
+    private RabbitTemplate rabbitTemplate;
 
     public ResponseEntity<Void> cadastrar(CadastroUsuarioDTO dto) {
         Usuario usuario = modelMapper.map(dto, Usuario.class);
@@ -63,5 +66,13 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    public ResponseEntity<Void> fazerPagamento(FazerPagamentoDTO dto) {
+        usuarioRepository.findById(dto.getIdUsuario()).orElseThrow(() -> new NotFoundException("Usuário não encontrado!"));
+
+        rabbitTemplate.convertAndSend("payment.request.queue", dto);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
