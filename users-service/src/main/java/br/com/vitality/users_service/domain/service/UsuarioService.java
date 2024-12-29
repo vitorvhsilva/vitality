@@ -3,6 +3,7 @@ package br.com.vitality.users_service.domain.service;
 import br.com.vitality.users_service.api.dto.input.*;
 import br.com.vitality.users_service.api.dto.output.TreinoOutputDTO;
 import br.com.vitality.users_service.api.dto.output.UsuarioOutputDTO;
+import br.com.vitality.users_service.api.exception.AssinaturaException;
 import br.com.vitality.users_service.api.exception.NotFoundException;
 import br.com.vitality.users_service.api.http.TreinoClient;
 import br.com.vitality.users_service.domain.model.Usuario;
@@ -88,6 +89,9 @@ public class UsuarioService {
 
     public ResponseEntity<TreinoOutputDTO> criarTreino(CaloriaDesejadaDTO dto) {
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario()).orElseThrow(() -> new NotFoundException("Usuário não encontrado!"));
+
+        if (!usuario.getAssinatura().equals(Assinatura.PREMIUM_PLUS))
+            throw new AssinaturaException("Você precisa da assinatura Premius Plus para acessar esse recurso");
 
         TreinoInputDTO input = treinoInputFactory.criarTreinoInput(usuario, dto);
         TreinoOutputDTO treinoOutput = treinoClient.criarTreino(input);
