@@ -21,6 +21,8 @@ public class Usuario {
     private String email;
     @NotBlank @Size(min = 8)
     private String senha;
+    @NotNull @Positive
+    private Integer idade;
     @Enumerated(value = EnumType.STRING)
     private Genero genero;
     @NotNull @Positive

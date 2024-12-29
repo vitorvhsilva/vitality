@@ -1,13 +1,13 @@
 package br.com.vitality.users_service.domain.service;
 
-import br.com.vitality.users_service.api.dto.input.AtualizarUsuarioDTO;
-import br.com.vitality.users_service.api.dto.input.CadastroUsuarioDTO;
-import br.com.vitality.users_service.api.dto.input.FazerPagamentoDTO;
-import br.com.vitality.users_service.api.dto.input.PagamentoOutputDTO;
+import br.com.vitality.users_service.api.dto.input.*;
+import br.com.vitality.users_service.api.dto.output.TreinoOutputDTO;
 import br.com.vitality.users_service.api.dto.output.UsuarioOutputDTO;
 import br.com.vitality.users_service.api.exception.NotFoundException;
+import br.com.vitality.users_service.api.http.TreinoClient;
 import br.com.vitality.users_service.domain.model.Usuario;
 import br.com.vitality.users_service.domain.repository.UsuarioRepository;
+import br.com.vitality.users_service.domain.service.strategy.TreinoInputFactory;
 import br.com.vitality.users_service.domain.utils.enums.Assinatura;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -25,6 +25,8 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
     private ModelMapper modelMapper;
     private RabbitTemplate rabbitTemplate;
+    private TreinoClient treinoClient;
+    private TreinoInputFactory treinoInputFactory;
 
     public ResponseEntity<Void> cadastrar(CadastroUsuarioDTO dto) {
         Usuario usuario = modelMapper.map(dto, Usuario.class);
@@ -82,5 +84,14 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario()).orElseThrow(() -> new NotFoundException("Usuário não encontrado!"));
 
         usuario.setAssinatura(dto.getAssinatura());
+    }
+
+    public ResponseEntity<TreinoOutputDTO> criarTreino(CaloriaDesejadaDTO dto) {
+        Usuario usuario = usuarioRepository.findById(dto.getIdUsuario()).orElseThrow(() -> new NotFoundException("Usuário não encontrado!"));
+
+        TreinoInputDTO input = treinoInputFactory.criarTreinoInput(usuario, dto);
+        TreinoOutputDTO treinoOutput = treinoClient.criarTreino(input);
+
+        return ResponseEntity.status(HttpStatus.OK).body(treinoOutput);
     }
 }

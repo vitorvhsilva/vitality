@@ -3,6 +3,8 @@ package br.com.vitality.users_service.api.controller;
 import br.com.vitality.users_service.api.dto.input.AtualizarUsuarioDTO;
 import br.com.vitality.users_service.api.dto.input.CadastroUsuarioDTO;
 import br.com.vitality.users_service.api.dto.input.FazerPagamentoDTO;
+import br.com.vitality.users_service.api.dto.input.CaloriaDesejadaDTO;
+import br.com.vitality.users_service.api.dto.output.TreinoOutputDTO;
 import br.com.vitality.users_service.api.dto.output.UsuarioOutputDTO;
 import br.com.vitality.users_service.domain.service.UsuarioService;
 import lombok.AllArgsConstructor;
@@ -46,5 +48,10 @@ public class UsuarioController {
     @PostMapping("/pagamentos")
     public ResponseEntity<Void> fazerPagamento(@RequestBody FazerPagamentoDTO dto) {
         return usuarioService.fazerPagamento(dto);
+    }
+
+    @PostMapping("/treino")
+    public ResponseEntity<TreinoOutputDTO> criarTreino(@RequestBody CaloriaDesejadaDTO dto) {
+        return usuarioService.criarTreino(dto);
     }
 }

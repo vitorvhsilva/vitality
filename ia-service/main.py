@@ -53,9 +53,9 @@ def predict():
   
   # Retorno da previsão
   response = {
-    "tipo_treino": depara_treino(type_prediction),
-    "frequencia_treino": int(frequency_prediction),
-    "duracao_treino_horas": round(duration_prediction, 2),
+    "tipoTreino": depara_treino(type_prediction),
+    "frequenciaTreino": int(frequency_prediction),
+    "duracaoTreinoHoras": round(duration_prediction, 2),
   }
   
   return jsonify(response)
